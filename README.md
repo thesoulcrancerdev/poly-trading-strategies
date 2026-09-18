@@ -31,7 +31,7 @@ Live profiles are linked in each section. Displayed account figures are UI snaps
 
 ---
 
-## EndCycle Sniping
+## EndCycle Sniping (Not the Same Edge Anymore)
 
 Polymarket profile: [0x3b84…f487](https://polymarket.com/0x3b8407699e832891203387d52c64d8f61ff2f487)
 
