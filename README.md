@@ -84,7 +84,7 @@ Binary short-horizon markets reprice as time expires. Probability mass concentra
 
 ---
 
-## Momentum Spike Sniping / Arbitrage
+## Momentum Spike Sniping / Arbitrage (Popular — Available for Sale)
 
 Polymarket profile: [KARIZMATIKU](https://polymarket.com/0x85fc9f25299cafb649700d9034dda5a48f408700)
 
