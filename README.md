@@ -55,8 +55,8 @@ The trade is late-cycle execution. If the path has already closed on $1, or the 
 ### Visual Example
 
 <p align="center">
-  <img src="images/endcycle-twap-account.png" alt="moneyforll all-time profile" width="560">
-  <img src="images/endcycle-twap-stats.png" alt="moneyforll performance statistics" width="300">
+  <img src="images/endcycle-twap-account.png" alt="moneyforll all-time profile" width="480">
+  <img src="images/endcycle-twap-stats.png" alt="moneyforll performance statistics" width="250">
 </p>
 
 **Example:** Polymarket profile [moneyforll](https://polymarket.com/@moneyforll?tab=activity), with the performance panel beside it.
@@ -69,7 +69,7 @@ The trade is late-cycle execution. If the path has already closed on $1, or the 
 - Worst trade on the panel: **Ethereum Up or Down — September 9, 7:40AM–7:45AM ET**, **-$279.40** (**-102.5%**). The favorite-side read can still finish at zero on a 5-minute window.
 
 <p align="center">
-  <img src="images/endcycle-twap-analysis.png" alt="moneyforll price buckets, active hours, and risk scores" width="880">
+  <img src="images/endcycle-twap-analysis.png" alt="moneyforll price buckets, active hours, and risk scores" width="730">
 </p>
 
 **Example:** Price buckets, active hours, and risk scores for the same account.
