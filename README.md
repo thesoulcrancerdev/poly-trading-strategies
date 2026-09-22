@@ -6,6 +6,7 @@ Systematic strategies running on the current **TWAP edition**. This document is 
 
 Questions or support:
 [![Telegram](https://img.shields.io/badge/Telegram-soulcrancerdev-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/soulcrancerdev)
+[![Community](https://img.shields.io/badge/Community-Telegram-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/+SxEC7bVXYyphNzI5)
 [![X](https://img.shields.io/badge/X-@soulcrancerdev-000000?style=flat-square&logo=x&logoColor=white)](https://x.com/soulcrancerdev)
 [![YouTube](https://img.shields.io/badge/YouTube-@soulcrancerdev-FF0000?style=flat-square&logo=youtube&logoColor=white)](https://youtube.com/@soulcrancerdev)
 
@@ -23,7 +24,7 @@ These strategies trade **observable market behavior**, not a narrative view on B
 
 | Strategy | Core Idea | Market Condition | Status |
 | --- | --- | --- | --- |
-| EndCycle Sniping | Buy the late-cycle favorite while it still trades below $1 | Short-window market near expiry; one side dominating | Live |
+| TWAP-Aware EndCycle Sniper | Buy the late-cycle favorite along its time-weighted path while it still trades below $1 | Short-window market near expiry; one side dominating | Popular — Available for Sale |
 | Momentum Spike Sniping / Arbitrage | Hit a sudden dislocation after a sharp expansion | Fast repricing in a short BTC Up/Down window | Live |
 | Additional strategies | Documented as they are introduced | — | Planned |
 
@@ -31,56 +32,70 @@ Live profiles are linked in each section. Displayed account figures are UI snaps
 
 ---
 
-## EndCycle Sniping (Not the Same Edge Anymore)
+## TWAP-Aware Polymarket EndCycle Sniper (Popular — Available for Sale)
 
-Polymarket profile: [0x3b84…f487](https://polymarket.com/0x3b8407699e832891203387d52c64d8f61ff2f487)
+Polymarket profile: [moneyforll](https://polymarket.com/@moneyforll?tab=activity)
 
 ### The Idea
 
-In 5-minute Bitcoin Up or Down markets, uncertainty compresses as the clock runs out. One side often becomes the favorite while still quoting below $1.
+In short-cycle Up or Down markets, uncertainty compresses as the clock runs out. One side becomes the favorite while the book can still quote it below $1.
 
-Near expiry, two things tend to change together: **time decay** concentrates probability on one outcome, and **liquidity quality** often deteriorates — thinner size, slower quote updates, a book that has not fully caught the remaining window.
+This version is **TWAP-aware**. The favorite is a path through the window, and the decision uses the time-weighted price of that path: where the side has traded, where it is offered now, and how much time is left. Size is taken in clips while the average entry still sits inside the gap to settlement.
 
-The trade is not “predict Bitcoin.” It is: late in the cycle, is the favorite still cheap relative to remaining time and available size? The strategy tries to capture that last gap to settlement, if the read and the fill both hold.
+The trade is late-cycle execution. If the path has already closed on $1, or the book cannot fill the average the clock allows, there is no trade.
 
 ### How the Trade Works
 
 1. Monitor the active short-cycle market as it approaches the end of its window.
-2. Read which outcome is dominating, where it is priced, and how much size is actually there.
-3. Require that remaining time, price, and liquidity still justify a fill.
-4. Buy the favored side.
+2. Read which outcome is dominating, the path that side has printed, and how much size is on the book.
+3. Compare the time-weighted price of the favorite with the live quote and the time remaining.
+4. Lift the favored side in clips while that average still clears the remaining gap.
 5. Hold through resolution and redeem if the market settles in-the-money.
 
 ### Visual Example
 
-![EndCycle Sniping account](images/endcycle-sniper-account.png)
+<p align="center">
+  <img src="images/endcycle-twap-account.png" alt="moneyforll all-time profile" width="870">
+  <img src="images/endcycle-twap-stats.png" alt="moneyforll performance statistics" width="450">
+</p>
 
-**Example:** Closed 5-minute Bitcoin Up or Down positions on the EndCycle account (August 26).
+**Example:** Polymarket profile [moneyforll](https://polymarket.com/@moneyforll?tab=activity), with the performance panel beside it.
 
-- Every visible market is a 5-minute BTC Up/Down window — not a long-horizon prediction.
-- Entries sit in the **64¢–84¢** range: favorite-side prices, not deep longshots.
-- Size is not uniform (`$33.50` vs `$416.00`), consistent with liquidity- and condition-dependent execution rather than a fixed ticket.
-- Each shown position redeemed near **$1 per share** after a win. That is settlement, not a claimed win rate.
+- Profile profit/loss reads **$7,444.99**. The curve is the account’s displayed path. **503** predictions, biggest win **$827.00**, positions value **$0.00**. Joined Sep 2026, **122** views on this snapshot.
+- Win rate **93.0%**: **491** wins and **37** losses, on **528** positions and **1,255** trades.
+- Realized PnL **+$9.44K**, unrealized PnL **-$2.57K**, open positions **1**, open value **$0.00**. This panel is a separate display from the Polymarket all-time figure.
+- Fees **-$617.23**, taker rebates **+$22.05**, maker rebates **$0.00**, maker ratio **0%**. The account takes liquidity.
+- Best trade on the panel: **Ethereum Up or Down — September 11, 3:30AM–3:35AM ET**, **+$827.00** (**+614%**). A gain of that size is a low entry that settled at $1. A fill in the 90¢ band redeems closer to an 11% gap.
+- Worst trade on the panel: **Ethereum Up or Down — September 9, 7:40AM–7:45AM ET**, **-$279.40** (**-102.5%**). The favorite-side read can still finish at zero on a 5-minute window.
 
-![EndCycle execution timing](images/endcycle-execution-timing.png)
+<p align="center">
+  <img src="images/endcycle-twap-analysis.png" alt="moneyforll price buckets, active hours, and risk scores" width="1321">
+</p>
 
-**Example:** Same 12:20–12:25 PM ET window, mapped from the activity feed to the on-chain fill time.
+**Example:** Price buckets, active hours, and risk scores for the same account.
 
-- The feed shows **Buy Down at 84¢** (50 shares total) and a later **Redeem $50.00**.
-- The annotated explorer timestamp is **04:24:12 UTC**, which is **12:24:12 PM ET**.
-- The window closes at **12:25 PM ET** — this fill sits in the **final minute** of the cycle.
-- That is the end-cycle setup in one frame: late clock, high price, small remaining gap to $1.
+- Positions concentrate in the favorite band: **251** in **90–100¢** and **143** in **80–90¢**.
+- Volume has the same shape. The **90–100¢** bucket is the bulk of traded size.
+- PnL is green across nearly every decile, with the larger bars in the upper price buckets. Displayed profit is many small gaps to $1, repeated. The **+614%** line is a separate extreme on the performance panel.
+- Activity is spread across the 24-hour cycle. The panel’s own spread mark is **8h 20m**.
+- Max drawdown **-$425.39**. Brier score is blank.
+- Sharpe **19.74**, Sortino **150.42**, Calmar **449.11**. These are the figures printed on the panel for this sample, beside a **-$425.39** drawdown and a **-$279.40** worst trade.
 
 ### Where the Edge Comes From
 
-Binary short-horizon markets reprice as time expires. Probability mass concentrates on one outcome, but the book can still quote that side below 100¢. The potential edge is that last gap — an **execution and timing** problem as much as a directional one. If the favorite is already fully priced, or the fill is late, there is nothing left to capture.
+Short-horizon binaries reprice into the close. One outcome takes the probability, and the book can still offer it below 100¢. The offer can also jump once the book thins.
+
+The candidate edge is the distance between the favorite’s time-weighted path and $1, provided the clips fill while that average is still short of settlement. TWAP-aware execution tries to own that path. Once the path has reached $1, or the takes walk through the gap, the window has nothing left to pay.
 
 ### Risk
 
-- The favorite can reverse in the last seconds of the window.
-- Late-cycle books are often thin: slippage, partial fills, stale quotes.
-- A correct read that is executed too late is just a bad fill.
-- Wrong-side selection if the underlying print disagrees with the book.
+- The favorite can reverse in the last seconds. The panel’s **37** losses are that case.
+- Late books are thin: partial clips, slippage, quotes that update late.
+- Clips paced too slowly leave size unfilled when the window ends.
+- Clips paced too quickly pay the final ask and give the gap back.
+- The underlying print can disagree with the side the book is treating as the favorite.
+- Losses on a high-priced favorite are a large fraction of premium. The worst displayed ETH window is **-$279.40**.
+- Sharpe, Sortino, and Calmar here are panel outputs on a short public history (joined Sep 2026). Read them with the drawdown.
 
 ---
 
@@ -192,5 +207,6 @@ Historical or displayed trades do not imply future results. Prediction-market tr
 Questions or support:
 
 - **Telegram** — [@soulcrancerdev](https://t.me/soulcrancerdev)
+- **Community** — [Telegram group](https://t.me/+SxEC7bVXYyphNzI5)
 - **X** — [@soulcrancerdev](https://x.com/soulcrancerdev)
 - **YouTube** — [@soulcrancerdev](https://youtube.com/@soulcrancerdev)
