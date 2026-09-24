@@ -69,6 +69,17 @@ The trade is late-cycle execution. If the path has already closed on $1, or the 
 - Worst trade on the panel: **Ethereum Up or Down — September 9, 7:40AM–7:45AM ET**, **-$279.40** (**-102.5%**). The favorite-side read can still finish at zero on a 5-minute window.
 
 <p align="center">
+  <img src="images/endcycle-twap-1c-snipe.png" alt="Buy 2,014 Down at 1.1 cents in the 4:30AM Bitcoin window, redeemed for $2,231.94" width="720">
+</p>
+
+**Example:** A 1¢ snipe in Bitcoin Up or Down — September 24, 4:30AM–4:35AM ET. The highlighted fill is the edge: the token is still offered near 1¢, and the account takes size there.
+
+- The same 5-minute window shows three Down clips: **60 at 6.7¢** (**-$4.01**), **158 at 5.2¢** (**-$8.28**), and **2,014 at 1.1¢** (**-$22.78**).
+- The 1.1¢ print is the snipe. **2,014 shares for $22.78** is a token quoted at about a cent, not a favorite already marked near $1.
+- That window then shows **Redeem Down +$2,231.94**. The three clips are **2,232** shares, and the redeem is about **$1 per share** on that inventory. Most of those shares were bought at **1.1¢**.
+- This is one settled window. The green figure is the redeem, not a strategy-level return.
+
+<p align="center">
   <img src="images/endcycle-twap-analysis.png" alt="moneyforll price buckets, active hours, and risk scores" width="730">
 </p>
 
@@ -87,9 +98,12 @@ Short-horizon binaries reprice into the close. One outcome takes the probability
 
 The candidate edge is the distance between the favorite’s time-weighted path and $1, provided the clips fill while that average is still short of settlement. TWAP-aware execution tries to own that path. Once the path has reached $1, or the takes walk through the gap, the window has nothing left to pay.
 
+The same clock can leave the other token offered near **1¢**. In the September 24, 4:30–4:35 AM ET Bitcoin window, Down was still available at **1.1¢** in size: **2,014 shares for $22.78**. Down then redeemed for **$2,231.94**. The edge in that frame is sniping the token at about a cent before the book stops offering it.
+
 ### Risk
 
 - The favorite can reverse in the last seconds. The panel’s **37** losses are that case.
+- A 1¢ token that does not settle pays zero. The September 24 clip risked **$22.78** to own 2,014 shares; the misses are not in that screenshot.
 - Late books are thin: partial clips, slippage, quotes that update late.
 - Clips paced too slowly leave size unfilled when the window ends.
 - Clips paced too quickly pay the final ask and give the gap back.
