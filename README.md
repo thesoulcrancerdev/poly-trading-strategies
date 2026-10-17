@@ -24,11 +24,72 @@ These strategies trade **observable market behavior**, not a narrative view on B
 
 | Strategy | Core Idea | Market Condition | Status |
 | --- | --- | --- | --- |
+| Market Maker (Splits + Sell) | Split a complete set, then sell the tokens into the book | Two-sided book; inventory comes from the split, not from a take | Live |
 | TWAP-Aware EndCycle Sniper | Buy the late-cycle favorite along its time-weighted path while it still trades below $1 | Short-window market near expiry; one side dominating | Popular — Available for Sale |
-| Momentum Spike Sniping / Arbitrage | Hit a sudden dislocation after a sharp expansion | Fast repricing in a short BTC Up/Down window | Live |
 | Additional strategies | Documented as they are introduced | — | Planned |
 
 Live profiles are linked in each section. Displayed account figures are UI snapshots, not a verified track record.
+
+---
+
+## Market Maker — Splits + Sell
+
+Polymarket profile: [spork30](https://polymarket.com/@spork30)
+
+**First market-maker version: split a complete set into inventory, then sell it into the book. Live since 23 July.**
+
+### The Idea
+
+This version does not lift a favorite. It **splits** collateral into a complete outcome set — both tokens, at $1 for the pair — and then **sells** those tokens into the book.
+
+The split is the inventory. The sell is the quote. If both sides sell for more than the $1 that minted them, the difference is the spread. Maker rebates pay on the posted size. A token that does not sell is inventory into settlement, not a missed click.
+
+This version has been running since **23 July**. September is one full month of that record.
+
+### How the Trade Works
+
+1. Split collateral into both outcome tokens.
+2. Offer those tokens on the book. The account is the maker.
+3. Sell the pair for more than $1 when the book pays the spread.
+4. Hold whatever does not sell through resolution.
+5. Collect maker rebates on the posted volume. Taker flow is not the business.
+
+### Visual Example
+
+<p align="center">
+  <img src="images/market-maker-september.png" alt="September 2026 calendar: +$8.7K, $3.6M volume, +$4.8K maker rebates" width="820">
+</p>
+
+**Example:** September 2026 calendar for [spork30](https://polymarket.com/@spork30).
+
+- Monthly PnL **+$8.7K** on **$3.6M** of volume. Maker rebates **+$4.8K**. Fees, liquidity, holding, refunds, and referral are blank on this panel.
+- Every displayed day is green, from **$135** on the 24th to **$548** on the 5th. The month is a sequence of small daily results, not one settlement.
+- Each day prints a maker rebate and **taker rebates of $0.00**. The account is posting, not lifting.
+- Volume stays large beside the daily PnL (`$77.5K` on the 1st, `$151.2K` on the 26th, `$119.2K` on the 30th). That is a spread business: a thin result on a lot of size.
+
+<p align="center">
+  <img src="images/market-maker-account.png" alt="spork30 all-time profit $11,408.11 and withdrawal history" width="640">
+</p>
+
+**Example:** Polymarket profile for the same account, history filtered to withdrawals.
+
+- All-time profit/loss **$11,408.11**. Portfolio **$3,639.41**, available to trade **$2,149.41**, past day **+$165.41** (**4.76%**).
+- The history is cash leaving the account: **$5,000.00**, **$2,006.05**, **$2,000.00**, **$1,800.00**, **$1,500.00**, **$1,300.00**, and **$1,000.00** clips. The list continues past the frame. These rows are withdrawals, not trades.
+- The all-time curve is the path since the bot started on **23 July**. September’s **+$8.7K** is one month inside that figure, not the whole of it.
+
+### Where the Edge Comes From
+
+A complete set costs $1 to mint. The book does not always buy both sides back at a combined $1. Quoting the split, and getting paid maker rebates for the size that trades, is the candidate edge.
+
+September puts numbers on that. **$3.6M** of volume, **+$8.7K** of monthly PnL, **+$4.8K** of maker rebates, and **$0.00** taker rebates on the displayed days. The rebate line is a large part of what the panel shows. The trading line is the rest. Once the pair sells for $1 or less, or one side is left unsold into a move, the spread is gone.
+
+### Risk
+
+- One side can sell and the other can remain. The unsold token settles at $1 or at $0.
+- A quoted price can be picked off when the underlying moves. Maker inventory is directional the moment it is no longer a pair.
+- The margin is thin. **+$8.7K** on **$3.6M** of volume does not survive a bad inventory day, a fee change, or a run of one-sided fills.
+- Withdrawals on the profile are not a return. They are cash already taken out.
+- Displayed calendar and profile figures are UI snapshots, not a verified track record.
 
 ---
 
@@ -113,62 +174,6 @@ The same clock can leave the other token offered near **1¢**. In the September 
 
 ---
 
-## Momentum Spike Sniping / Arbitrage (Popular — Available for Sale)
-
-Polymarket profile: [KARIZMATIKU](https://polymarket.com/0x85fc9f25299cafb649700d9034dda5a48f408700)
-
-### The Idea
-
-A **momentum spike** is a sudden expansion (or collapse) in one outcome’s price inside a short window. The move can outrun the resting book: one leg prints too cheap, the other too rich, or both legs gap to prices that no longer look internally consistent.
-
-The sequence is:
-
-**momentum → repricing → temporary dislocation → execution**
-
-**Momentum** is the detection of that expansion. **Arbitrage-like execution** is hitting the dislocated leg(s) before the book catches up. This is not a locked, risk-free pair trade unless both legs are acquired such that payoff covers cost — and the examples below do not establish that. Buying the cheap side of a spike is still inventory risk if the move fades or the other leg is the one that settles at $1.
-
-### How the Trade Works
-
-1. Detect a sharp, short-horizon expansion in a BTC Up/Down market.
-2. Measure how far the printed price has disconnected from the rest of the book and from the other leg.
-3. Decide whether the remaining window still allows a useful fill.
-4. Accumulate the dislocated side; if the other leg also prints at a depressed price, it may be hit as a second pass — that is not an automatic hedge.
-5. Redeem the winning shares at settlement.
-
-### Visual Example
-
-![Momentum Spike account](images/momentum-spike-account.png)
-
-**Example:** Closed short-window BTC Up/Down trades on the momentum account (August 25).
-
-- Windows are 5–15 minutes (`5:00–5:15 PM`, `5:10–5:15 PM`, `5:55–6:00 AM`). Overlapping clocks are visible, not a single daily bet.
-- Average entries are far below the EndCycle cluster: **20¢**, **44.4¢**, **48.6¢**, **54.7¢** — cheap-side inventory, not late favorites.
-- The `5:00–5:15 PM` line shows **524.9 Up at 20¢**, `$105.09` traded, redeemed at `$524.92`. That average matches a spike-buy, not an 80¢ end-cycle snipe.
-- Large percentage marks on winning rows describe settlement vs. cost basis on those lines. They are not a strategy-level return.
-
-![Momentum spike / arbitrage activity](images/arbitrage-example.png)
-
-**Example:** Fill tape for the same `August 25, 5:00–5:15 PM ET` market.
-
-- **Up accumulation:** 121.6 shares at **41¢**, then 403.4 shares at **12¢**. The spike continued; the second clip is cheaper than the first.
-- **Down prints in the same window:** 177.0 at **28¢** and 259.8 at **10¢**. The book offered both legs at depressed prices at different points in the cycle.
-- **Redeem 524.9 shares for $524.95** — $1 per share on the Up inventory (121.6 + 403.4). That confirms Up settled as the winner.
-- Down inventory in this tape is a separate fill stream. If Up settles at $1, those Down shares do not. Hitting both cheap legs is **dislocation capture**, not a proven risk-free arb.
-
-### Where the Edge Comes From
-
-A fast move can leave resting quotes behind. One outcome can trade at 12¢ while the window is still open and the underlying has already moved. The potential inefficiency is that **lag between spike and book** — plus, occasionally, a second leg that also prints too cheap. The edge, if any, is getting filled inside that gap. Once the book has repriced, the setup is gone.
-
-### Risk
-
-- The spike can reverse; cheap inventory can expire at 0.
-- Opposite-leg fills are extra risk unless they are a true pair with cost below payoff.
-- Thin books during a spike: incomplete fills, slippage, chasing a print that has already moved.
-- Overlapping 5- and 15-minute windows can correlate; several clips can fail together.
-- Signal error: volatility is not the same thing as a tradable dislocation.
-
----
-
 ## More Strategies Coming
 
 These are the strategies being introduced publicly.
@@ -184,7 +189,7 @@ Additional strategies are running in the broader TWAP system and will be documen
 ## What These Strategies Have in Common
 
 - React to **market structure**, not a story about the event.
-- Require a **specific condition** (late clock, or a spike dislocation) before entry.
+- Require a **specific condition** before size: a late clock for the sniper, a book that can be quoted for the maker.
 - Treat **execution** as part of the strategy: time remaining, size on the book, fill quality.
 - Separate **signal** from **trade** — seeing a move is not the same as having a fill.
 - Look for **repeatable behavior** in short-cycle BTC Up/Down markets, not isolated wins.
